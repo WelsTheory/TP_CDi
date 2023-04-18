@@ -114,10 +114,12 @@ void receiveData (float* buffer)
 
 	// dacSample = (1023.0 / 3.3) * sampleInVolts
 	// 1023.0 / 3.3 = 310.0
-	U = (float) dacValue * 3.3 / 1023.0;
-	uint32_t adc_value = adcRead(CH1);
+	//U = (float) dacValue * 3.3 / 1023.0;
+	//uint32_t adc_value = adcRead(CH1);
 
-	Y = 3.3* (float) adc_value / 1023.0;
+	//Y = 3.3* (float) adc_value / 1023.0;
+	U = (float) dacValue * 3.3 / 1023.0;
+	Y = (float) getVoltsSampleFrom( ADC0_CH_Y );
 
 	console_float(Y,U);
 	//printf("%d/%d\r\n",adc_value,dacValue);

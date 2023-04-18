@@ -30,19 +30,43 @@
 
 /*=====[Private function-like macros]========================================*/
 //#define COUNT_CYCLES
+#define KP_2
+//#define KI_49
+//#define KP_54
+//#define KI_4703
+
+//#define random_coef
 /*=====[Definitions of private data types]===================================*/
-float32_t error, output;
-float32_t set_point;
+
 /*=====[Definitions of external public global variables]=====================*/
-//#define PID_PARAM_KP        1.64f            /* Proporcional */
-//#define PID_PARAM_KI        0.119        		/* Integral */
-//#define PID_PARAM_KD        0.000672f        /* Derivative */
-#define PID_PARAM_KP        1.64f            /* Proporcional */
-#define PID_PARAM_KI        561.0f        		/* Integral */
-#define PID_PARAM_KD        0.000672f        /* Derivative */
-//#define PID_PARAM_KP        0.613            /* Proporcional */
-//#define PID_PARAM_KI        0.119        	/* Integral */
-//#define PID_PARAM_KD        0.029            /* Derivative */
+#ifdef KI_49
+#define Coef_KP        0.0817f            /* Proporcional */
+#define Coef_KI        49.1f        		/* Integral */
+#define Coef_KD        0.0000339f        /* Derivative */
+#endif
+#ifdef KP_2
+#define Coef_KP        2.5f            /* Proporcional */
+#define Coef_KI        1.0f        		/* Integral */
+#define Coef_KD        0.0f        /* Derivative */
+#endif
+#ifdef KP_54
+#define Coef_KP        0.12259f            /* Proporcional */
+#define Coef_KI        54.0345f        		/* Integral */
+#define Coef_KD        0.000069531f        /* Derivative */
+#endif
+
+#ifdef KI_4703
+#define Coef_KP        10.3845f            /* Proporcional */
+#define Coef_KI        4703.5711f        		/* Integral */
+#define Coef_KD        0.0038301f        /* Derivative */
+#endif
+
+#ifdef random_coef
+#define Coef_KP        2.01f            /* Proporcional */
+#define Coef_KI        1.52f        		/* Integral */
+#define Coef_KD        0.043f        /* Derivative */
+#endif
+
 /*=====[Definitions of public global variables]==============================*/
 
 /*=====[Definitions of private global variables]=============================*/
@@ -54,7 +78,7 @@ static int16_t dacValue;
 /*=====[Implementations of public functions]=================================*/
 
 // Para calcular el tiempo que tarda el algoritmo y establecer un h minimo
-//#define COUNT_CYCLES
+#define COUNT_CYCLES
 
 // Task implementation
 void pidControlTask( void* taskParmPtr )
@@ -74,9 +98,9 @@ void pidControlTask( void* taskParmPtr )
 
 	// PID Controller Initialization
 	pidInit( &PsPIDController,
-			PID_PARAM_KP,                  // Kp
-			PID_PARAM_KI / h_s,            // Ki
-			PID_PARAM_KD * h_s,            // Kd
+			Coef_KP,                  // Kp
+			Coef_KI / h_s,            // Ki
+			Coef_KD * h_s,            // Kd
 			h_s,                   // h en [s]
 			20.0f,                 // N
 			1.0f,                  // b
@@ -103,8 +127,8 @@ void pidControlTask( void* taskParmPtr )
 
 		// Leer salida y[k] y refererencia r[k]
 		y = adcRead( CH1 ) * SCALE_Y;
-		//r = adcRead( CH2 ) * SCALE_R;
-		r = 1.0;
+		r = adcRead( CH2 ) * SCALE_R;
+		//r = 1.0;
 
 
 		// Calculate PID controller output u[k]

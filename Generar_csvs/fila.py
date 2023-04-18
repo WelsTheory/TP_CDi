@@ -1,7 +1,7 @@
 import csv
 
 # Abrir el archivo CSV en modo escritura
-with open('ADC_Y.csv', 'r') as f:
+with open('DAC_U.csv', 'r') as f:
     reader = csv.reader(f)
     data = list(reader)
 
@@ -12,6 +12,6 @@ columna = [fila[0] for fila in data][:391]
 fila = ','.join(columna)
 
 # Escribir la fila en un nuevo archivo CSV
-with open('ADC_Y.csv', 'w') as f:
+with open('DAC_U.csv', 'w') as f:
     writer = csv.writer(f)
     writer.writerow([fila])

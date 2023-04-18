@@ -119,11 +119,10 @@ void receiveData (float* buffer)
 
 	//Y = 3.3* (float) adc_value / 1023.0;
 	U = (float) dacValue * 3.3 / 1023.0;
-	Y = (float) getVoltsSampleFrom( ADC0_CH_Y );
+	Y = (float) getVoltsSampleFrom( ADC0_CH_Y );c
 
 	console_float(Y,U);
 	//printf("%d/%d\r\n",adc_value,dacValue);
-
 
 	buffer[0] = U;
 	buffer[1] = Y;
